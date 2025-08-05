@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1800px; /* Aumentado ainda mais */
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 10px 25px; /* Reduzido ao máximo */
+            margin-bottom: 25px; /* Reduzido a margem */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-text {
+            text-align: left;
+        }
+
+        .header h1 {
+            font-size: 2em; /* Tamanho final da fonte */
+            margin-bottom: 4px; /* Margem final */
+            display: flex;
+            align-items: center;
+        }
+
+        .header h1 .title-icon {
+            display: inline-block;
+            transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Animação com easing */
+        }
+
+        .header:hover .title-icon {
+            transform: rotate(360deg);
+        }
+
+        .header h1 .title-text {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            padding-left: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1em;
+        }
+
+        .stats {
+            display: flex; /* Alterado para flexbox */
+            gap: 15px;
+            width: auto; /* Largura automática */
+            justify-content: flex-end; /* Alinhado à direita */
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 20px; /* Padding ajustado */
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            width: 220px; /* Largura fixa para cada card */
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.2em; /* Ligeiramente maior */
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 250px 1fr; /* Sidebar mais fina, mais espaço para conteúdo */
+            gap: 35px; /* Aumentado o gap */
+            margin-top: 30px;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .sidebar h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-section h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 8px;
+        }
+
+        .nav-links a {
+            color: #555;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: block;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        .nav-links a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        details > summary {
+            list-style: none;
+        }
+
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details > summary h2 {
+            display: inline-block;
+            cursor: pointer;
+            margin-bottom: 0; /* Remove a margem inferior padrão do h2 */
+            border-bottom: none; /* Remove a borda inferior padrão do h2 */
+            padding-bottom: 0; /* Remove o padding inferior padrão do h2 */
+        }
+
+        .expand-icon {
+            display: inline-block;
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        details[open] .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .section h3 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Aumentado o minmax */
+            gap: 25px; /* Aumentado o gap */
+            margin-top: 20px;
+        }
+
+        .rule-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .rule-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .rule-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .rule-card p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .structure-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .structure-section h3 {
+            color: white;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .structure-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .structure-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .structure-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 240px 1fr; /* Sidebar um pouco menor */
+            }
+            .header h1 {
+                font-size: 2.2em;
+            }
+            .header {
+                flex-direction: column;
+            }
+            .stats {
+                width: 100%;
+                margin-top: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr; /* Stack layout */
+            }
+            
+            .sidebar {
+                position: static;
+                margin-bottom: 30px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 2px 8px;
+            border-radius: 15px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .roadmap-container {
+            position: relative;
+            padding: 20px 0;
+            margin-top: 30px;
+        }
+
+        .roadmap-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: #667eea;
+            border-radius: 2px;
+        }
+
+        .roadmap-step {
+            position: relative;
+            margin-bottom: 40px;
+            width: 50%;
+        }
+
+        .roadmap-step:nth-child(odd) {
+            left: 0;
+            padding-right: 40px;
+            text-align: right;
+        }
+
+        .roadmap-step:nth-child(even) {
+            left: 50%;
+            padding-left: 40px;
+            text-align: left;
+        }
+
+        .roadmap-step::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid #667eea;
+            z-index: 1;
+        }
+
+        .roadmap-step:nth-child(odd)::after {
+            right: -10px;
+        }
+
+        .roadmap-step:nth-child(even)::after {
+            left: -10px;
+        }
+
+        .roadmap-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .roadmap-content h4 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .roadmap-content p {
+            color: #555;
+        }
+
+        /* Styles for Mermaid Diagram */
+        .mermaid-container {
+            background-color: #fcfcfc;
+            padding: 35px;
+            border-radius: 10px;
+            border: 1px solid #bdc3c7;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+            margin-bottom: 40px;
+        }
+        
+        .mermaid {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+        }
+
+        /* Custom Mermaid.js styles for a better look */
+        .mermaid .node rect, .mermaid .node circle, .mermaid .node polygon {
+            fill: #e0f2f7;
+            stroke: #667eea;
+            stroke-width: 2px;
+            transition: fill 0.3s ease, stroke 0.3s ease;
+        }
+        
+        .mermaid .node:hover rect, .mermaid .node:hover circle, .mermaid .node:hover polygon {
+            fill: #d0e9f2;
+            stroke: #2980b9;
+        }
+
+        .mermaid .node text {
+            fill: #2c3e50;
+            font-weight: 500;
+        }
+
+        .mermaid .edgePath .path {
+            stroke: #34495e;
+            stroke-width: 2px;
+            marker-end: url(#arrowhead);
+        }
+
+        .mermaid .edgeLabel text {
+            fill: #34495e;
+            font-weight: 400;
+        }
+
+        .mermaid .arrowheadPath {
+            fill: #34495e;
+            stroke: #34495e;
+        }
+
+        .mermaid .cluster rect {
+            fill: #f0f8ff;
+            stroke: #764ba2;
+            stroke-dasharray: 5 5;
+            stroke-width: 2px;
+        }
+
+        .mermaid .cluster text {
+            fill: #764ba2;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-text">
+                <h1><span class="title-icon">📚</span> <span class="title-text">Regras de Integração</span></h1>
+                <p>Sistema Corpore - Documentação Completa</p>
+                <p>Baseada na análise dos logs de debug SQL</p>
+            </div>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">19</div>
+                    <div class="stat-label">Total de Regras</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">11</div>
+                    <div class="stat-label">Categorias</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Cobertura</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2025</div>
+                    <div class="stat-label">Atualização</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="sidebar">
+                <h3>📋 Índice de Navegação</h3>
+                
+                <div class="nav-section">
+                    <h4>👥 Alunos</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-alunos.html">Criação de Alunos (Sem Turma/Disciplina)</a></li>
+                        <li><a href="regra-criacao-de-alunos.html">Criação de Alunos</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>📊 Status</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-status-matricula.html">Status de Matrícula</a></li>
+                        <li><a href="regra-criacao-status-enturmacao.html">Status de Enturmação</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>📝 Matrículas</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-matriculas-shabilitacaoaluno.html">Matrículas (SHabilitacaoAluno)</a></li>
+                        <li><a href="regra-criacao-matriculas-periodo-smatricpl.html">Matrículas do Período (SMatricpl)</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>🎓 Enturmação</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-enturmacoes-smatricula.html">Enturmações (SMatricula)</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>👨‍🏫 Professores</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-professores.html">Criação de Professores</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>🏢 Cadastros</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-cadastros-basicos.html">Cadastros Básicos</a></li>
+                        <li><a href="regra-criacao-campus-polos.html">Campus/Polos</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>📅 Períodos</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-periodos.html">Criação de Períodos</a></li>
+                        <li><a href="regra-encerramento-periodos.html">Encerramento de Períodos</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>📚 Cursos</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-cursos.html">Criação de Cursos</a></li>
+                        <li><a href="regra-encerramento-cursos.html">Encerramento de Cursos</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>📖 Disciplinas</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-disciplinas.html">Criação de Disciplinas</a></li>
+                        <li><a href="regra-criacao-disciplinas-grade.html">Disciplinas da Grade</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>📋 Grades</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-grades.html">Criação de Grades</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h4>👥 Turmas</h4>
+                    <ul class="nav-links">
+                        <li><a href="regra-criacao-turmas.html">Criação de Turmas</a></li>
+                        <li><a href="regra-criacao-de-turmas-disciplinas.html">Turmas/Disciplinas</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="section">
+                    <details>
+                        <summary>
+                            <h2>Fluxo de Processos de Integração <span class="expand-icon">▼</span></h2>
+                        </summary>
+                        <div class="mermaid-container">
+                            <div class="mermaid">
+                                graph TD
+                                    A((Início)) --> B[Coleta de Dados Externos];
+                                    B --> C{Dados Válidos?};
+
+                                    C -- Sim --> D[Processar Cadastros Básicos];
+                                    D --> E[Processar Estrutura Acadêmica];
+                                    E --> F[Processar Alunos e Turmas];
+                                    F --> G[Processar Matrículas e Enturmações];
+
+                                    G --> H{Operação de Encerramento?};
+                                    H -- Sim --> I[Processar Encerramento de Períodos e Cursos];
+                                    I --> J((Fim do Processo));
+
+                                    H -- Não --> J;
+                                    C -- Não --> K[Notificar Erro e Registrar Falha];
+                                    K --> J;
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                
+
+                <div class="section">
+                    <h2>🎯 Estrutura Padrão das Regras</h2>
+                    <div class="structure-section">
+                        <h3>📋 Componentes de Cada Regra</h3>
+                        <ul class="structure-list">
+                            <li><strong>Visão Geral</strong> - Propósito e objetivos principais</li>
+                            <li><strong>O que a regra faz?</strong> - Registros que serão/não serão integrados</li>
+                            <li><strong>Como funciona o Filtro?</strong> - Condições e critérios específicos</li>
+                            <li><strong>Dados que serão integrados</strong> - Lista dos dados principais e de controle</li>
+                            <li><strong>Regras de Validação</strong> - Dados obrigatórios e opcionais</li>
+                            <li><strong>Como verificar se está funcionando</strong> - Indicadores e alertas</li>
+                            <li><strong>Casos de Uso</strong> - Integração inicial, sincronização e validação</li>
+                            <li><strong>Perguntas Frequentes</strong> - Dúvidas comuns e troubleshooting</li>
+                            <li><strong>Próximos Passos</strong> - Fases de configuração, operação e otimização</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>📚 Lista Completa de Regras</h2>
+                    <div class="structure-section">
+                        <h3>📋 Componentes de Cada Regra</h3>
+                        <ul class="structure-list">
+                            <li><strong>Visão Geral</strong> - Propósito e objetivos principais</li>
+                            <li><strong>O que a regra faz?</strong> - Registros que serão/não serão integrados</li>
+                            <li><strong>Como funciona o Filtro?</strong> - Condições e critérios específicos</li>
+                            <li><strong>Dados que serão integrados</strong> - Lista dos dados principais e de controle</li>
+                            <li><strong>Regras de Validação</strong> - Dados obrigatórios e opcionais</li>
+                            <li><strong>Como verificar se está funcionando</strong> - Indicadores e alertas</li>
+                            <li><strong>Casos de Uso</strong> - Integração inicial, sincronização e validação</li>
+                            <li><strong>Perguntas Frequentes</strong> - Dúvidas comuns e troubleshooting</li>
+                            <li><strong>Próximos Passos</strong> - Fases de configuração, operação e otimização</li>
+                        </ul>
+                    </div>
+                </div>
+                    
+                    <h3>👥 Regras de Alunos</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-alunos.html'">
+                            <h4>🎓 Criação de Alunos (Sem Turma/Disciplina)</h4>
+                            <p>Gerenciar a criação de alunos sem vínculo direto com turmas ou disciplinas específicas</p>
+                        </div>
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-de-alunos.html'">
+                            <h4>👨‍🎓 Criação de Alunos</h4>
+                            <p>Processo completo de criação e gerenciamento de alunos no sistema</p>
+                        </div>
+                    </div>
+
+                    <h3>📊 Regras de Status</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-status-matricula.html'">
+                            <h4>📝 Status de Matrícula</h4>
+                            <p>Controle e gerenciamento dos status de matrícula dos alunos</p>
+                        </div>
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-status-enturmacao.html'">
+                            <h4>🎯 Status de Enturmação</h4>
+                            <p>Gerenciamento dos status de enturmação dos alunos</p>
+                        </div>
+                    </div>
+
+                    <h3>📝 Regras de Matrículas</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-matriculas-shabilitacaoaluno.html'">
+                            <h4>📋 Matrículas (SHabilitacaoAluno)</h4>
+                            <p>Processo de matrícula considerando habilitações específicas do aluno</p>
+                        </div>
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-matriculas-periodo-smatricpl.html'">
+                            <h4>📅 Matrículas do Período (SMatricpl)</h4>
+                            <p>Gerenciamento de matrículas por período letivo</p>
+                        </div>
+                    </div>
+
+                    <h3>🎓 Regras de Enturmação</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-enturmacoes-smatricula.html'">
+                            <h4>👥 Enturmações (SMatricula)</h4>
+                            <p>Alocação de alunos em turmas e disciplinas com controle de período</p>
+                        </div>
+                    </div>
+
+                    <h3>👨‍🏫 Regras de Professores</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-professores.html'">
+                            <h4>👨‍🏫 Criação de Professores</h4>
+                            <p>Processo de criação e gerenciamento de professores no sistema</p>
+                        </div>
+                    </div>
+
+                    <h3>🏢 Regras de Cadastros</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-cadastros-basicos.html'">
+                            <h4>📋 Cadastros Básicos</h4>
+                            <p>Gerenciamento de cadastros fundamentais do sistema</p>
+                        </div>
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-campus-polos.html'">
+                            <h4>🏛️ Campus/Polos</h4>
+                            <p>Criação e gerenciamento de campus e polos da instituição</p>
+                        </div>
+                    </div>
+
+                    <h3>📅 Regras de Períodos</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-periodos.html'">
+                            <h4>📅 Criação de Períodos</h4>
+                            <p>Gerenciamento de períodos letivos e acadêmicos</p>
+                        </div>
+                        <div class="rule-card" onclick="window.location.href='regra-encerramento-periodos.html'">
+                            <h4>🔚 Encerramento de Períodos</h4>
+                            <p>Processo de encerramento e finalização de períodos</p>
+                        </div>
+                    </div>
+
+                    <h3>📚 Regras de Cursos</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-cursos.html'">
+                            <h4>📚 Criação de Cursos</h4>
+                            <p>Processo de criação e configuração de cursos</p>
+                        </div>
+                        <div class="rule-card" onclick="window.location.href='regra-encerramento-cursos.html'">
+                            <h4>🔚 Encerramento de Cursos</h4>
+                            <p>Processo de encerramento e finalização de cursos</p>
+                        </div>
+                    </div>
+
+                    <h3>📖 Regras de Disciplinas</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-disciplinas.html'">
+                            <h4>📖 Criação de Disciplinas</h4>
+                            <p>Gerenciamento de disciplinas e suas configurações</p>
+                        </div>
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-disciplinas-grade.html'">
+                            <h4>📋 Disciplinas da Grade</h4>
+                            <p>Organização de disciplinas dentro das grades curriculares</p>
+                        </div>
+                    </div>
+
+                    <h3>📋 Regras de Grades</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-grades.html'">
+                            <h4>📋 Criação de Grades</h4>
+                            <p>Processo de criação e configuração de grades curriculares</p>
+                        </div>
+                    </div>
+
+                    <h3>👥 Regras de Turmas</h3>
+                    <div class="rules-grid">
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-turmas.html'">
+                            <h4>👥 Criação de Turmas</h4>
+                            <p>Processo de criação e gerenciamento de turmas</p>
+                        </div>
+                        <div class="rule-card" onclick="window.location.href='regra-criacao-de-turmas-disciplinas.html'">
+                            <h4>📚 Turmas/Disciplinas</h4>
+                            <p>Vinculação de turmas com disciplinas específicas</p>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <div class="section">
+                    <h2>📝 Como Usar</h2>
+                    <div class="structure-section">
+                        <h3>🎯 Guia de Utilização</h3>
+                        <ul class="structure-list">
+                            <li><strong>Para consultar uma regra específica</strong>: Clique no card da regra desejada</li>
+                            <li><strong>Para entender o funcionamento</strong>: Leia a seção "Como funciona o Filtro?"</li>
+                            <li><strong>Para verificar se está funcionando</strong>: Consulte a seção "Como verificar se está funcionando"</li>
+                            <li><strong>Para dúvidas</strong>: Consulte a seção "Perguntas Frequentes"</li>
+                            <li><strong>Para navegação rápida</strong>: Use o índice lateral para acessar diretamente</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>🚀 Próximos Passos</h2>
+                    <div class="roadmap-container">
+                        <div class="roadmap-step">
+                            <div class="roadmap-content">
+                                <h4>🔧 Implementação</h4>
+                                <p>Aplicar as regras em código de integração</p>
+                            </div>
+                        </div>
+                        <div class="roadmap-step">
+                            <div class="roadmap-content">
+                                <h4>🧪 Testes</h4>
+                                <p>Criar testes automatizados para cada regra</p>
+                            </div>
+                        </div>
+                        <div class="roadmap-step">
+                            <div class="roadmap-content">
+                                <h4>📊 Monitoramento</h4>
+                                <p>Configurar alertas e métricas de performance</p>
+                            </div>
+                        </div>
+                        <div class="roadmap-step">
+                            <div class="roadmap-content">
+                                <h4>📚 Documentação</h4>
+                                <p>Expandir casos de uso específicos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📚 <span class="highlight">Documentação gerada em 01/08/2025</span></p>
+            <p>Sistema Corpore - Regras de Integração</p>
+            
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                htmlLabels: true
+            }
+        });
+    </script>
+</body>
+</html> 
